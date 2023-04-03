@@ -4,37 +4,52 @@ import constants from "./constants.js";
 import WeatherCard from "./CreateWeatherCard.js";
 const { root } = constants;
 
-Request.send("GET", "current.json", "&q=Kiev&lang=ru").then((data) => {
-    console.log("current", data);
-    for (const key in data) {
-        console.log(key);
-    }
-});
+Request.send("GET", "current.json", "&q=Kiev&lang=ru")
+    .then((data) => {
+        let { current } = data;
+        let { location } = data;
+        console.log(data);
+        const weathet = new WeatherCard(
+            "Погода сегодня",
+            location.country,
+            location.name,
+            location.localtime,
+            current.temp_c,
+            current.feelslike_c,
+            current.condition.text,
+            current.condition.icon,
+            current.wind_kph
+        );
+        console.log(weathet.render(root));
+    })
+    .catch((e) => {
+        console.log(e.massage);
+    });
 
-Request.send("GET", "forecast.json", "&q=Kiev&days=3").then((data) => {
-    console.log("future", data);
-});
+// Request.send("GET", "forecast.json", "&q=Kiev&days=3").then((data) => {
+//     console.log("future", data);
+// });
 
-const neddedDate = "2023-04-01";
+// const neddedDate = "2023-04-01";
 
-Request.send(
-    "GET",
-    "history.json",
-    `&q=Kiev&dt=2023-03-29&end_dt=${neddedDate}`
-).then((data) => {
-    console.log("past", data);
-});
+// Request.send(
+//     "GET",
+//     "history.json",
+//     `&q=Kiev&dt=2023-03-29&end_dt=${neddedDate}`
+// ).then((data) => {
+//     console.log("past", data);
+// });
 
 //Это тест
-const weathet = new WeatherCard(
-    "Погода сегодня",
-    "vefverf",
-    "rvrvvf",
-    "rvvr",
-    44,
-    55,
-    "fvfvfvfv",
-    "./img/weather.svg",
-    55
-);
-console.log(weathet.render(root));
+// const weathet = new WeatherCard(
+//     "Погода сегодня",
+//     "vefverf",
+//     "rvrvvf",
+//     "rvvr",
+//     44,
+//     55,
+//     "fvfvfvfv",
+//     "./img/weather.svg",
+//     55
+// );
+// console.log(weathet.render(root));

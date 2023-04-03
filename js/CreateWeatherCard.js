@@ -25,8 +25,8 @@ export default class WeatherCard {
     render(element) {
         const div = document.createElement("div");
         div.className = "card";
-        div.style = "width: 18rem;";
-        const title = document.createElement("h1");
+        div.style = "width: 14rem;";
+        const title = document.createElement("h3");
         title.textContent = this.title;
         title.className = "card-title text-center";
         const location = document.createElement("p");
