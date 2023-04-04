@@ -26,9 +26,9 @@ Request.send("GET", "current.json", "&q=Kiev&lang=ru")
         console.log(e.massage);
     });
 
-// Request.send("GET", "forecast.json", "&q=Kiev&days=3").then((data) => {
-//     console.log("future", data);
-// });
+Request.send("GET", "forecast.json", "&q=Kiev&days=3").then((data) => {
+    console.log("future", data);
+});
 
 // const neddedDate = "2023-04-01";
 
@@ -39,17 +39,3 @@ Request.send("GET", "current.json", "&q=Kiev&lang=ru")
 // ).then((data) => {
 //     console.log("past", data);
 // });
-
-//Это тест
-// const weathet = new WeatherCard(
-//     "Погода сегодня",
-//     "vefverf",
-//     "rvrvvf",
-//     "rvvr",
-//     44,
-//     55,
-//     "fvfvfvfv",
-//     "./img/weather.svg",
-//     55
-// );
-// console.log(weathet.render(root));
