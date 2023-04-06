@@ -53,7 +53,6 @@ Request.getLocation().then((data) => {
                 item.day.condition.text,
                 item.day.condition.icon
             );
-
             root.append(weatherCard.render());
         });
     });
