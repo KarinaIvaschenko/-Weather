@@ -1,41 +1,60 @@
 //Основной скрипт
 import Request from "./Request.js";
 import constants from "./constants.js";
-import WeatherCard from "./CreateWeatherCard.js";
-const { root } = constants;
+import WeatherCard from "./WeatherCard.js";
+import { getFormattedDate } from "./utilities.js";
 
-Request.send("GET", "current.json", "&q=Kiev&lang=ru")
-    .then((data) => {
-        let { current } = data;
-        let { location } = data;
+const { root, BASE_URL, API_KEY } = constants;
+
+Request.getLocation().then((data) => {
+    const { query, city, country } = data;
+
+    Request.send(
+        "GET",
+        `${BASE_URL}forecast.json?key=${API_KEY}&q=${query}&days=3&lang=ru`
+    ).then((data) => {
         console.log(data);
-        const weathet = new WeatherCard(
-            "Погода сегодня",
-            location.country,
-            location.name,
-            location.localtime,
-            current.temp_c,
-            current.feelslike_c,
-            current.condition.text,
-            current.condition.icon,
-            current.wind_kph
-        );
-        console.log(weathet.render(root));
-    })
-    .catch((e) => {
-        console.log(e.massage);
+        const { current, forecast } = data;
+
+        const cards = forecast.forecastday.map((item) => {
+            const { date } = item;
+            const time = new Date();
+            const today = getFormattedDate(time);
+            time.setDate(time.getDate() + 1);
+            const tomorrow = getFormattedDate(time);
+            time.setDate(time.getDate() + 1);
+            const afterTomorrow = getFormattedDate(time);
+
+            let title = "";
+            let temperature = "";
+            let feelslike = "";
+
+            if (date === today) {
+                title = "Погода сегодня";
+                temperature = `Температура: ${current.temp_c} ℃`;
+                feelslike = `Ощущается как: ${current.feelslike_c} ℃`;
+            } else if (date === tomorrow) {
+                title = "Погода завтра";
+                temperature = `Максимальная температура: ${item.day.maxtemp_c} ℃`;
+                feelslike = `Минимальная температура: ${item.day.mintemp_c} ℃`;
+            } else if (date === afterTomorrow) {
+                title = "Погода послезавтра";
+                temperature = `Максимальная температура: ${item.day.maxtemp_c} ℃`;
+                feelslike = `Минимальная температура: ${item.day.mintemp_c} ℃`;
+            }
+
+            const weatherCard = new WeatherCard(
+                title,
+                country,
+                city,
+                date,
+                temperature,
+                feelslike,
+                item.day.condition.text,
+                item.day.condition.icon
+            );
+
+            root.append(weatherCard.render());
+        });
     });
-
-Request.send("GET", "forecast.json", "&q=Kiev&days=3").then((data) => {
-    console.log("future", data);
 });
-
-// const neddedDate = "2023-04-01";
-
-// Request.send(
-//     "GET",
-//     "history.json",
-//     `&q=Kiev&dt=2023-03-29&end_dt=${neddedDate}`
-// ).then((data) => {
-//     console.log("past", data);
-// });

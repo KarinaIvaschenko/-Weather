@@ -1,28 +1,24 @@
-//пока эта карточка для реального времени
-
 export default class WeatherCard {
     constructor(
         title,
         country,
         city,
-        time,
+        date,
         temperature,
         felt,
         textWeather,
-        icon,
-        wind
+        icon
     ) {
         this.title = title;
         this.country = country;
         this.city = city;
-        this.time = time;
+        this.date = date;
         this.temperature = temperature;
         this.felt = felt;
         this.textWeather = textWeather;
         this.icon = icon;
-        this.wind = wind;
     }
-    render(element) {
+    render() {
         const div = document.createElement("div");
         div.className = "card";
         div.style = "width: 14rem;";
@@ -32,7 +28,7 @@ export default class WeatherCard {
         const location = document.createElement("p");
         location.textContent = `${this.country}, ${this.city}`;
         const localTime = document.createElement("p");
-        localTime.textContent = this.time;
+        localTime.textContent = this.date;
         const temperature = document.createElement("p");
         temperature.textContent = this.temperature;
         const icon = document.createElement("img");
@@ -42,11 +38,12 @@ export default class WeatherCard {
         textWeather.textContent = this.textWeather;
         const felt = document.createElement("p");
         felt.textContent = this.felt;
-        const wind = document.createElement("p");
-        wind.textContent = `${this.wind} km`;
         const button = document.createElement("button");
         button.className = "btn btn-primary d-flex justify-content-center";
         button.textContent = "Показать больше";
+        // button.addEventListener('click',()=>{
+        //тут будет клик
+        // })
         div.append(
             title,
             location,
@@ -55,10 +52,9 @@ export default class WeatherCard {
             icon,
             textWeather,
             felt,
-            wind,
             button
         );
-        element.append(div);
+
         return div;
     }
 }
